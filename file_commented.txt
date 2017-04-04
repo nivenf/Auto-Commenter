@@ -1,0 +1,71 @@
+/*
+ * Name: Your Name Here
+ * Date: 1/13/2017
+ * Class: CSC 000
+ * Professor: Dr. Professor
+ * Program Name: Program 10
+ *
+ * ---Card.java---	
+ * Description: 
+*/
+
+public class Card implements Comparable<Card> {
+	private Rank rank;
+	private Suit suit;
+	
+
+	/* Method Name: Card()
+	 * 
+	 * Parameters: Rank rank, Suit suit
+	 * 
+	 * Returns: none
+	 * 
+	 * Description: 
+	*/ 
+	public Card(Rank rank, Suit suit) {
+		this.rank = rank;
+		this.suit = suit;
+	}
+	
+
+	/* Method Name: getSuit()
+	 * 
+	 * Parameters: none
+	 * 
+	 * Returns: Suit
+	 * 
+	 * Description: 
+	*/ 
+	public Suit getSuit() {
+		return suit;
+	}
+	
+
+	/* Method Name: getRank()
+	 * 
+	 * Parameters: none
+	 * 
+	 * Returns: Rank
+	 * 
+	 * Description: 
+	*/ 
+	public Rank getRank() {
+		return rank;
+	}
+
+
+	/* Method Name: compareTo()
+	 * 
+	 * Parameters: Card other
+	 * 
+	 * Returns: int
+	 * 
+	 * Description: 
+	*/ 
+	@Override
+	public int compareTo(Card other) {
+		int thisValue = this.rank.getValue();
+		int otherValue = other.rank.getValue();
+		return otherValue - thisValue;
+	}
+}

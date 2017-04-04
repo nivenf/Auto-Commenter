@@ -1,0 +1,5 @@
+name:Your Name Here
+date due:1/13/2017
+class:CSC 000
+professor:Dr. Professor
+program name:Program 10
