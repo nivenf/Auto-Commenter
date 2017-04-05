@@ -1,6 +1,7 @@
 package model;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,13 +26,13 @@ public class comment implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public comment(boolean mg, boolean ag, String name, String date, String clas, String prof, String ta, String prog, String type) {
+	public comment(boolean mg, boolean ag, String name, String date, String clas, String prof, String ta, String prog, String type, File in, File out) {
 		try {
 			
 			// Opens Files
 			
-			BufferedReader br = new BufferedReader(new FileReader("file_to_comment.txt"));		// File to be modified
-			BufferedWriter bw = new BufferedWriter(new FileWriter("file_commented.txt"));		// Finished file
+			BufferedReader br = new BufferedReader(new FileReader(in));		// File to be modified
+			BufferedWriter bw = new BufferedWriter(new FileWriter(out));		// Finished file
 			
 			String line;
 			
@@ -172,7 +173,6 @@ public class comment implements Serializable{
 	private static String getMethods() {
 		String result = "";
 		try {
-			@SuppressWarnings("resource")
 			BufferedReader br = new BufferedReader(new FileReader("file_to_comment.txt"));
 			String line;
 			while((line = br.readLine()) != null) {
@@ -194,6 +194,7 @@ public class comment implements Serializable{
 					result += " *\t" + method_name + "(" + parameters + ")\n";
 				}
 			}
+			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -229,19 +230,25 @@ public class commentGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					BufferedWriter bw = new BufferedWriter(new FileWriter("file_to_comment.txt"));
+					File inputFile = new File("file_to_comment.txt");
+					File outputFile = new File("file_commented.txt");
+					BufferedWriter bw = new BufferedWriter(new FileWriter(inputFile));
 					bw.write(code.getText());
 					bw.close();
 					
-					new comment(method_glossary, autofill_getters, header_name.getText(), header_date.getText(), header_class.getText(), header_prof.getText(), header_ta.getText(), header_prog.getText(), file_type);
-					@SuppressWarnings("resource")
-					BufferedReader br = new BufferedReader(new FileReader("file_commented.txt"));
+					new comment(method_glossary, autofill_getters, header_name.getText(), header_date.getText(), header_class.getText(), header_prof.getText(), header_ta.getText(), header_prog.getText(), file_type, inputFile, outputFile);
+					BufferedReader br = new BufferedReader(new FileReader(outputFile));
 					String result = "";
 					String line = "";
 					while((line = br.readLine()) != null) {
 						result += line + "\n";
 					}
 					code.setText(result);
+					br.close();
+					bw.close();
+
+					inputFile.delete();
+					outputFile.delete();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
