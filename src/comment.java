@@ -1,9 +1,9 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 
 /*
  * 							----------------------
@@ -12,61 +12,65 @@ import java.io.IOException;
  * 
  * 		- Inserts a header comment and method block comments in your program -
  * 
- * 
- * 
- * 						*********** USAGE ***********
- * 
- * 	Modify base.txt by placing corresponding answers after the colon with no space
- * 
- * 			Place file that needs comments in file_commented.txt
- * 
- * 		Make sure file has no method block comments or header comment
- * 			
- * 		Add descriptions to header comment and method block comments
- * 
  * 						*****************************
- * 
- * 
- * 			Notes: I shoved everything in the main method. Cause why not.
- * 			TODO: 	-Add glossary of methods in header comment
- * 					-Autofill getter methods
- * 					-Possibly saving/loading settings for a more customized experience
- * 					-Tidy code to make it more streamlined and less cluttered
- * 					-Finds constructor and changes block comment
  * 
  * 								Niven Francis
  * 
  */
 
-public class comment {
-	public static void main(String[] args) {
-		
-		
+public class comment implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	public comment(boolean mg, boolean ag, String name, String date, String clas, String prof, String ta, String prog, String type) {
 		try {
 			
 			// Opens Files
 			
 			BufferedReader br = new BufferedReader(new FileReader("file_to_comment.txt"));		// File to be modified
 			BufferedWriter bw = new BufferedWriter(new FileWriter("file_commented.txt"));		// Finished file
-			BufferedReader bb = new BufferedReader(new FileReader("base.txt"));					// Basis for header comment
 			
 			String line;
 			
+			line = br.readLine();
+			
+			if(type.equals("JAVA")) {
+				while(line.contains("import ") || line.equals("")) {
+					if(line.contains(" class "))
+						break;
+					bw.write(line + "\n");
+					line = br.readLine();
+				}
+			}
+			if(type.equals("C")) {
+				while(line.contains("#include ") || line.equals("")) {
+					if(line.contains(" class "))
+						break;
+					bw.write(line + "\n");
+					line = br.readLine();
+				}
+			}
 			
 			// Writes header comment to file. Modify to however you want your header file to be
 			
 			bw.write("/*" + "\n");
-			line = bb.readLine();
-			bw.write(" * Name: " + line.substring(line.indexOf(":") + 1) + "\n");				// Name
-			line = bb.readLine();
-			bw.write(" * Date: " + line.substring(line.indexOf(":") + 1) + "\n");				// Date
-			line = bb.readLine();
-			bw.write(" * Class: " + line.substring(line.indexOf(":") + 1) + "\n");				// Class
-			line = bb.readLine();
-			bw.write(" * Professor: " + line.substring(line.indexOf(":") + 1) + "\n");			// Professor
-			line = bb.readLine();
-			bw.write(" * Program Name: " + line.substring(line.indexOf(":") + 1));				// Program Name
-			line = br.readLine();
+			if(!name.isEmpty())
+				bw.write(" * Name: " + name + "\n");				// Name
+			if(!date.isEmpty())
+				bw.write(" * Date: " + date + "\n");				// Date
+			if(!clas.isEmpty())
+				bw.write(" * Class: " + clas + "\n");				// Class
+			if(!prof.isEmpty())
+				bw.write(" * Professor: " + prof + "\n");			// Professor
+			if(!ta.isEmpty())
+				bw.write(" * TA: " + ta + "\n");
+			if(!prog.isEmpty())
+				bw.write(" * Program Name: " + prog + "\n");				// Program Name
+			if(!name.isEmpty() || !date.isEmpty() || !clas.isEmpty() 
+					|| !prof.isEmpty() || !ta.isEmpty() || !prog.isEmpty())
+				bw.write(" *\n");
 			
 			if(line == null || line.length() == 0) {											// Checks if empty file
 				if((line = br.readLine()) == null) {
@@ -76,12 +80,20 @@ public class comment {
 			}
 			
 			String[] l = line.split(" ");
-			bw.write("\n *\n * ---" + l[2] + ".java---	\n");									// File Name, grabs from 'public class' line
+			if(type.equals("JAVA"))
+				bw.write(" * ---" + l[2] + ".java---	\n");
+			if(type.equals("C"))
+				bw.write(" * ---" + l[2] + ".c---	\n");// File Name, grabs from 'public class' line
 			bw.write(" * Description: " + "\n");												// Description for you to fill out afterwards
-		/*	bw.write(" *\n");
-			bw.write(" * ---Methods---" + "\n");
-			bw.write(getMethods());
-		*/	bw.write("*/" + "\n\n");
+			if(mg) {
+				bw.write(" *\n");
+				if(type.equals("JAVA"))
+					bw.write(" * ---Methods---" + "\n");
+				if(type.equals("C"))
+					bw.write(" * ---Functions---" + "\n");
+				bw.write(getMethods());
+			}
+			bw.write("*/" + "\n\n");
 			
 			
 			// Goes through code to see where to add method block comments
@@ -151,17 +163,15 @@ public class comment {
 			// CLoses files
 			br.close();
 			bw.close();
-			bb.close();
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	// Finished, not implemented (TODO: Asking & saving user settings) see lines 81-84
 	private static String getMethods() {
 		String result = "";
 		try {
+			@SuppressWarnings("resource")
 			BufferedReader br = new BufferedReader(new FileReader("file_to_comment.txt"));
 			String line;
 			while((line = br.readLine()) != null) {
