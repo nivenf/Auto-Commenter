@@ -39,7 +39,7 @@ public class comment implements Serializable{
 			line = br.readLine();
 			
 			if(type.equals("JAVA")) {
-				while(line.contains("import ") || line.equals("")) {
+				while(line.contains("import ") || line.contains("package") || line.equals("")) {
 					if(line.contains(" class "))
 						break;
 					bw.write(line + "\n");
